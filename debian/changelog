@@ -1,0 +1,233 @@
+urfkill (0.6.0~20150318.103828.5539c0d.1-0ubuntu4.1~xenial1) xenial; urgency=medium
+
+  [ You-Sheng Yang ]
+  * debian/patches/build-fix-a-compile-warning.patch:
+    - Add patch to fix a compile error with current toolchain
+  * debian/rules:
+    - Properly set DEB_HOST_MULTIARCH
+  * debian/control:
+    - Built-dep on hybris for arm64
+
+ -- Łukasz 'sil2100' Zemczak <lukasz.zemczak@ubuntu.com>  Fri, 26 Aug 2016 12:56:01 +0200
+
+urfkill (0.6.0~20150318.103828.5539c0d.1-0ubuntu4) xenial; urgency=medium
+
+  * Protect against race condition on start in Touch devices (LP: #1549320)
+
+ -- Alfonso Sanchez-Beato (email Canonical) <alfonso.sanchez-beato@canonical.com>  Wed, 24 Feb 2016 18:14:55 +0100
+
+urfkill (0.6.0~20150318.103828.5539c0d.1-0ubuntu3) xenial; urgency=medium
+
+  * Specify build-dependency architecture limitations on libhybris-dev,
+    libandroid-properties-dev, and android-headers in positive rather than
+    negative terms, so that we don't incorrectly try to use those packages
+    on new architectures that lack Android support.
+
+ -- Colin Watson <cjwatson@ubuntu.com>  Tue, 29 Dec 2015 00:43:30 +0000
+
+urfkill (0.6.0~20150318.103828.5539c0d.1-0ubuntu2) wily; urgency=medium
+
+  * Add monitor-urfkill debugging script
+
+ -- Alfonso Sanchez-Beato (email Canonical) <alfonso.sanchez-beato@canonical.com>  Mon, 27 Apr 2015 17:17:27 -0500
+
+urfkill (0.6.0~20150318.103828.5539c0d.1-0ubuntu1) vivid; urgency=medium
+
+  * New upstream snapshot, bugfix only:
+    - Guard against double call to set ofono's online property.
+    - UrfConfig: make the strict flight mode a configuration parameter.
+    - UrfConfig: Enforce strict flight mode when set. (LP: #1427439)
+
+ -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Thu, 19 Mar 2015 20:50:13 -0400
+
+urfkill (0.6.0~20141020.151220.1dc6cf4-0ubuntu2) vivid; urgency=medium
+
+  * Add systemd unit.
+
+ -- Martin Pitt <martin.pitt@ubuntu.com>  Wed, 14 Jan 2015 13:00:33 +0100
+
+urfkill (0.6.0~20141020.151220.1dc6cf4-0ubuntu1) vivid; urgency=medium
+
+  * New release snapshot:
+    - UrfOfonoManager: check NULL proxy (LP: #1381818)
+    - UrfOfonoManager: Fix ofono re-start case (SIGABRT with reg_id > 0)
+      (LP: #1346685)
+
+ -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Tue, 11 Nov 2014 13:18:15 -0500
+
+urfkill (0.6.0~20141007.235123.f908aff.1-0ubuntu1) utopic; urgency=medium
+
+  * New release snapshot:
+    - Asynchronous support for rfkill operations. (LP: #1321627, #1339794)
+    - Improvements to state persistence. (LP: #1354716)
+    - Support for devices driven by libhybris rather than rfkill.
+  * debian/patches/ignore_input_monitor_startup.patch: dropped, included
+    upstream.
+  * debian/control:
+    - bump Build-Depends on libglib2.0-dev to >= 2.36 for GTask.
+    - add a Build-Depends on libhybris-dev for hybris-driven devices support.
+    - bump Standards-Version to 3.9.5.
+  * debian/scripts/enumerate: handle the new hybris device type.
+  * debian/rules: remove SysV init startup links.
+
+ -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Tue, 07 Oct 2014 23:53:07 -0400
+
+urfkill (0.6.0~20140708.110711.a0581f3-0ubuntu3) utopic; urgency=medium
+
+  [ Chad MILLER ]
+  * debian/control: Depend on python3, because of scripts in debian/scripts/
+  * debian/patches/urfkill-debug-input.patch: Too few arguments to format
+    string causing SEGVs. (LP: #1357576)
+
+  [ Mathieu Trudel-Lapierre ]
+  * debian/control, debian/rules: drop hardening-wrapper; just use build flags
+    from dh (but with all hardening enabled).
+
+ -- Chad MILLER <chad.miller@canonical.com>  Fri, 22 Aug 2014 10:19:52 -0400
+
+urfkill (0.6.0~20140708.110711.a0581f3-0ubuntu2) utopic; urgency=medium
+
+  * debian/patches/ignore_input_monitor_startup.patch: don't fail startup if
+    the input device monitor fails to start. (LP: #1340710)
+
+ -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Fri, 11 Jul 2014 09:33:33 -0400
+
+urfkill (0.6.0~20140708.110711.a0581f3-0ubuntu1) utopic; urgency=medium
+
+  * New release snapshot:
+    + always write out persistence state changes to disk.
+    + arbitrator: save wanted state to persistence, and not the current device
+      state on shutdown.
+    + Fixes to signals from devices on state changes.
+    + Saved desired state when adaptor is not present
+    + Allow logging to stdout for debug.
+
+ -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Wed, 09 Jul 2014 14:53:13 -0400
+
+urfkill (0.6.0~20140527.173146.03f4503-0ubuntu1~mtrudel1) utopic; urgency=medium
+
+  [ Mathieu Trudel-Lapierre ]
+  * New release snapshot:
+    + Online the modem if it's already Powered when properties are retrieved.
+    + Don't fail to start the arbitrator if /dev/rfkill is missing.
+
+  [ Dimitri John Ledkov ]
+  * Make urfkill job start on started dbus.
+  * Remove urfkill dbus activation file, as upstart is used to manager
+    urfkill.
+
+ -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Wed, 28 May 2014 16:48:30 +0200
+
+urfkill (0.5.0+20140512.223520.8d05071-0ubuntu1) utopic; urgency=medium
+
+  * New release:
+    + UrfDevice is now generic; UrfDeviceKernel implements the specific kernel
+      type of devices for standard killswitches.
+    + Moved all kernel ops to UrfDeviceKernel.
+    + Implement oFono modem handling via UrfDeviceOfono.
+    + Fix bugs in persistence lifecycle.
+    + Handle saving flight mode state.
+    + Properly sync up new device states with persistence data.
+    + Implement urf_device_ofono_get_state().
+    + Add signal for flight mode changes.
+  * debian/patches/use-glib-gettext.patch: use GLib's gettext checks.
+  * debian/urfkill.upstart.in: stop on stopping dbus.
+
+ -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Tue, 13 May 2014 16:10:48 -0400
+
+urfkill (0.4.0+20140119.184011.2a32da2-0ubuntu2) trusty; urgency=medium
+
+  * debian/control: replace Depends on consolekit with systemd-services for
+    the urfkill binary package: it's now built with logind support instead.
+
+ -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Fri, 24 Jan 2014 11:53:26 -0500
+
+urfkill (0.4.0+20140119.184011.2a32da2-0ubuntu1) trusty; urgency=low
+
+  * New release / git snapshot from github.com/lcp/urfkill:
+    - Add a flight mode option
+    - Implement killswitch persistence (saving and restoring across reboot)
+    - Support logging to syslog
+    - Added a debug mode
+  * debian/rules: configure with --with-session-tracking=systemd.
+  * debian/patches/02_fix_arm_profile_crash.patch,
+    debian/patches/03_fix_nfc_crash.patch: dropped, included.
+  * debian/source/format: switch to format 3.0 (quilt)
+  * debian/urfkill.dirs: add /var/lib/urfkill so that it gets created.
+  * debian/urfkill-debug-input.patch: debug input events too.
+    Set G_MESSAGES_DEBUG=URfkill to start urfkill to debug the messages.
+  * debian/urfkill.upstart.in: upstart job for the daemon.
+  * debian/control, debian/rules: don't do a separate -dbg package.
+
+ -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Mon, 23 Dec 2013 14:12:32 -0500
+
+urfkill (0.4.0-4ubuntu1) trusty; urgency=low
+
+  [ Tony Espy ]
+  * debian/control: create urfkill-dbg package.
+  * debian/rules: added dh_strip logic for new -dbg package.
+  * debian/patches/02_fix_arm_profile_crash.patch: check for
+    for the existence of DMI devices before creating an instance
+    of DmiInfo to prevent a crash.
+  * debian/patches/03_fix_nfc_crash.patch: add support for the
+    new RFKILL_NFC type to prevent an assertion/crash. (LP: #1218567)
+
+  [ Mathieu Trudel-Lapierre ]
+  * debian/rules: use --with autotools_dev to update config.{sub,guess} on
+    build so as to fix building on arm64.
+
+ -- Mathieu Trudel-Lapierre <mathieu-tl@ubuntu.com>  Mon, 09 Dec 2013 11:20:16 -0500
+
+urfkill (0.4.0-4) unstable; urgency=low
+
+  [Martin Pitt]
+  * debian/control: Add missing consolekit dependency. (Closes: #706569)
+
+ -- Keng-Yu Lin <kengyu@lexical.tw>  Thu, 15 Aug 2013 13:58:52 +0800
+
+urfkill (0.4.0-3) unstable; urgency=low
+
+  * debian/gir1.2-urfkill-glib0.install: change to non-multi-arch path.
+    (Closes: #695341)
+  * Bump Standards-Version to 3.9.4
+
+  [Bart Martens]
+  * debian/watch: watch the tag in github.
+
+ -- Keng-Yu Lin <kengyu@lexical.tw>  Tue, 19 Mar 2013 17:50:54 +0800
+
+urfkill (0.4.0-2) unstable; urgency=low
+
+  [Mathieu Trudel-Lapierre]
+  * debian/rules: clean up sample comments, simplify rules to make use of
+    DEB_HOST_MULTIARCH as it is already available.
+  * debian/urfkill.init.in: fix typo: add lib/ to the multiarch path to the
+    urfkilld binary. (Closes: #694821)
+
+ -- Keng-Yu Lin <kengyu@lexical.tw>  Fri, 04 Jan 2013 21:15:20 +0800
+
+urfkill (0.4.0-1) unstable; urgency=low
+
+  * New upstream release (Closes: #668888)
+  * Add Multiarch support
+  * Bump Standards-Version to 3.9.3
+  * Changed gir1.2-urfkill-glib0 to introspection section
+  * Added DM-Upload-Allowed: yes
+  * Advanced to DH9
+  * Removed debian/patches/02_add_missing_autogen_sh.patch
+  * Update debian/copyright format to 1.0
+  * Add DEB-3 compliant headers in debian/patches/*
+
+ -- Keng-Yu Lin <kengyu@lexical.tw>  Tue, 24 Jul 2012 22:48:51 +0800
+
+urfkill (0.3.0-1) unstable; urgency=low
+
+  * New upstream release
+
+ -- Keng-Yu Lin <kengyu@lexical.tw>  Thu, 29 Sep 2011 10:48:56 +0800
+
+urfkill (0.2.0-1) unstable; urgency=low
+
+  * Initial release (Closes: #637351)
+
+ -- Keng-Yu Lin <kengyu@lexical.tw>  Thu, 18 Aug 2011 13:06:26 +0800

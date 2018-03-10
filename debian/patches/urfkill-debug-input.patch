@@ -1,0 +1,25 @@
+From: Mathieu Trudel-Lapierre <mathieu.trudel-lapierre@canonical.com>
+Subject: add some debug message for input events
+
+Some people have reported there are issues with high CPU usage because of the
+input event handler; try to get additional information so we can actually
+debug this if there really is an issue.
+
+Index: urfkill/src/urf-input.c
+===================================================================
+--- urfkill.orig/src/urf-input.c
++++ urfkill/src/urf-input.c
+@@ -83,6 +83,13 @@ input_event_cb (GIOChannel   *source,
+ 		GIOCondition  condition,
+ 		UrfInput     *input)
+ {
++	g_debug ("input event condition %x (%s%s%s%s )",
++		 condition,
++		 condition & G_IO_IN ? " G_IO_IN" : "",
++		 condition & G_IO_ERR ? " G_IO_ERR" : "",
++		 condition & G_IO_HUP ? " G_IO_HUP" : "",
++		 condition & ~(G_IO_IN | G_IO_ERR | G_IO_HUP) ? " with extra state" : "");
++
+ 	if (condition & G_IO_IN) {
+ 		GIOStatus status;
+ 		struct input_event event;

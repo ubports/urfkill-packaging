@@ -1,0 +1,22 @@
+Description: Add missing POTFILES.* needed for successful building
+Author: Keng-Yu Lin <kengyu@lexical.tw>
+Last-Update: 2012-07-17
+
+---
+ po/POTFILES.in   |    2 ++
+ po/POTFILES.skip |    1 +
+ 2 files changed, 3 insertions(+)
+
+Index: b/po/POTFILES.skip
+===================================================================
+--- /dev/null
++++ b/po/POTFILES.skip
+@@ -0,0 +1 @@
++policy/org.freedesktop.urfkill.policy.in
+Index: b/po/POTFILES.in
+===================================================================
+--- /dev/null
++++ b/po/POTFILES.in
+@@ -0,0 +1,2 @@
++src/urf-main.c
++src/urf-device-ofono.c

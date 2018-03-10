@@ -1,0 +1,4 @@
+01_fix_ftbfs_on_intltool.patch
+urfkill-debug-input.patch
+use-glib-gettext.patch
+build-fix-a-compile-warning.patch

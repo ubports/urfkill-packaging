@@ -1,0 +1,103 @@
+#!/usr/bin/python3
+
+from gi.repository import GLib
+
+import dbus
+import dbus.mainloop.glib
+
+_dbus2py = {
+	dbus.String : str,
+	dbus.UInt32 : int,
+	dbus.Int32 : int,
+	dbus.Int16 : int,
+	dbus.UInt16 : int,
+	dbus.UInt64 : int,
+	dbus.Int64 : int,
+	dbus.Byte : int,
+	dbus.Boolean : bool,
+	dbus.ByteArray : str,
+	dbus.ObjectPath : str
+    }
+
+def dbus2py(d):
+	t = type(d)
+	if t in _dbus2py:
+		return _dbus2py[t](d)
+	if t is dbus.Dictionary:
+		return dict([(dbus2py(k), dbus2py(v)) for k, v in d.items()])
+	if t is dbus.Array and d.signature == "y":
+		return "".join([chr(b) for b in d])
+	if t is dbus.Array or t is list:
+		return [dbus2py(v) for v in d]
+	if t is dbus.Struct or t is tuple:
+		return tuple([dbus2py(v) for v in d])
+	return d
+
+def pretty(d):
+	d = dbus2py(d)
+	t = type(d)
+
+	if t in (dict, tuple, list) and len(d) > 0:
+		if t is dict:
+			d = ", ".join(["%s = %s" % (k, pretty(v))
+					for k, v in d.items()])
+			return "{ %s }" % d
+
+		d = " ".join([pretty(e) for e in d])
+
+		if t is tuple:
+			return "( %s )" % d
+
+	if t is str:
+		return "%s" % d
+
+	return str(d)
+
+def property_changed(name, changed, invalidated, path, member):
+	print("{%s} [%s] %s: %s" % (name, path, member, pretty(changed)))
+
+def signal_no_arg(interface, path, member):
+	print("{%s} [%s] %s" % (interface, path, member))
+
+def device_changed(obj, interface, path, member):
+	print("{%s} [%s] %s: %s" % (interface, path, member, obj))
+
+def flight_mode_changed(val, interface, path, member):
+	print("{%s} [%s] %s: %s" % (interface, path, member, pretty(val)))
+
+if __name__ == '__main__':
+	dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+
+	bus = dbus.SystemBus()
+
+	bus.add_signal_receiver(property_changed,
+				bus_name="org.freedesktop.URfkill",
+				signal_name = "PropertiesChanged",
+				path_keyword="path",
+				member_keyword="member")
+
+	for signal in ["StateChanged",
+			"Changed"]:
+		bus.add_signal_receiver(signal_no_arg,
+					bus_name="org.freedesktop.URfkill",
+					signal_name = signal,
+					interface_keyword="interface",
+					path_keyword="path",
+					member_keyword="member")
+
+	bus.add_signal_receiver(device_changed,
+				bus_name="org.freedesktop.URfkill",
+				signal_name = "DeviceChanged",
+				interface_keyword="interface",
+				path_keyword="path",
+				member_keyword="member")
+
+	bus.add_signal_receiver(flight_mode_changed,
+				bus_name="org.freedesktop.URfkill",
+				signal_name = "FlightModeChanged",
+				interface_keyword="interface",
+				path_keyword="path",
+				member_keyword="member")
+
+	mainloop = GLib.MainLoop()
+	mainloop.run()

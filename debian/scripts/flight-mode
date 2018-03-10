@@ -1,0 +1,36 @@
+#!/usr/bin/python3
+
+import dbus
+import sys
+
+
+def check_flight_mode(manager):
+	flight_mode = manager.IsFlightMode()
+	print("flight-mode is: %s" % flight_mode)
+
+
+def set_flight_mode(manager, enabled):
+	flight_mode = manager.FlightMode(enabled)
+	print("flight-mode is: %s" % flight_mode)
+
+if __name__ == "__main__":
+
+	num_args = len(sys.argv)
+
+	if (num_args == 1):
+		check = True
+	elif (num_args == 2):
+		check = False
+	else:
+		print("Usage: %s  0|1" % (sys.argv[0]))
+		exit(1)
+
+	bus = dbus.SystemBus()
+	manager = dbus.Interface(bus.get_object('org.freedesktop.URfkill',
+						'/org/freedesktop/URfkill'),
+				'org.freedesktop.URfkill')
+
+	if check == True:
+		check_flight_mode(manager)
+	else:
+		set_flight_mode(manager, int(sys.argv[1]))

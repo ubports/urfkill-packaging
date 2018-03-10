@@ -1,0 +1,54 @@
+#!/usr/bin/python3
+
+import dbus
+
+def get_props(bus, path):
+
+	props = dbus.Dictionary()
+	device = dbus.Interface(bus.get_object('org.freedesktop.URfkill', path),
+    	     				'org.freedesktop.DBus.Properties')
+
+	try:
+		props.update(device.GetAll('org.freedesktop.URfkill.Device'))
+		print("Printing props for unspecialized device: %s" % path)
+	except:
+                pass
+
+	try:
+		props.update(device.GetAll('org.freedesktop.URfkill.Device.Kernel'))
+		print("Printing props for Kernel device: %s" % path)
+	except:
+                pass
+
+	try:
+		props.update(device.GetAll('org.freedesktop.URfkill.Device.Ofono'))
+		print("Printing props for Ofono device: %s" % path)
+	except:
+                pass
+
+	try:
+		props.update(device.GetAll('org.freedesktop.URfkill.Device.Hybris'))
+		print("Printing props for Hybris device: %s" % path)
+	except:
+                pass
+
+	for prop in props:
+            print ("{}: {}".format(prop, props[prop]))
+
+	print ("")
+
+def get_devices(bus, manager):
+	devices = manager.EnumerateDevices()
+
+	for path in devices:
+		print(path)
+		get_props(bus, path)
+
+if __name__ == "__main__":
+
+	bus = dbus.SystemBus()
+	manager = dbus.Interface(bus.get_object('org.freedesktop.URfkill',
+				'/org/freedesktop/URfkill'),
+				'org.freedesktop.URfkill')
+	get_devices(bus, manager)
+

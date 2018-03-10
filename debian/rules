@@ -1,0 +1,41 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+debian/urfkill.upstart: debian/urfkill.upstart.in
+	sed -e "s/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g" $? > debian/`basename $? .in`
+
+debian/urfkill.service: debian/urfkill.service.in
+	sed -e "s/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g" $? > debian/`basename $? .in`
+
+debian/urfkill.init: debian/urfkill.init.in
+	sed -e "s/@DEB_HOST_MULTIARCH@/$(DEB_HOST_MULTIARCH)/g" $? > debian/`basename $? .in`
+
+override_dh_autoreconf:
+	NOCONFIGURE=1 dh_autoreconf gnome-autogen.sh
+	intltoolize -f -c
+
+override_dh_auto_clean:
+	rm -f debian/urfkill.upstart debian/urfkill.service
+	dh_auto_clean
+
+override_dh_auto_configure: debian/urfkill.upstart debian/urfkill.service
+	dh_auto_configure -- --libexecdir=\$${libdir}/urfkill \
+			--with-session-tracking=systemd
+
+override_dh_installinit:
+	dh_installinit -- remove
+
+override_dh_install:
+	dh_install
+	# We use upstart job to manager urfkill, not dbus activation
+	rm -rf ./debian/urfkill/usr/share/dbus-1/system-services/
+
+%:
+	dh $@ --with autotools_dev,autoreconf,systemd
