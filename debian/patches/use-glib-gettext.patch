@@ -2,11 +2,11 @@
  configure.ac |    3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-Index: urfkill-0.6.0~20150318.103828.5539c0d/configure.ac
+Index: b/configure.ac
 ===================================================================
---- urfkill-0.6.0~20150318.103828.5539c0d.orig/configure.ac
-+++ urfkill-0.6.0~20150318.103828.5539c0d/configure.ac
-@@ -217,8 +217,7 @@ fi
+--- a/configure.ac
++++ b/configure.ac
+@@ -211,8 +211,7 @@ fi
  # i18n support
  IT_PROG_INTLTOOL([0.40.0])
  

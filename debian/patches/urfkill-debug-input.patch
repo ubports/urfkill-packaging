@@ -5,10 +5,10 @@ Some people have reported there are issues with high CPU usage because of the
 input event handler; try to get additional information so we can actually
 debug this if there really is an issue.
 
-Index: urfkill-0.6.0~20150318.103828.5539c0d/src/urf-input.c
+Index: urfkill/src/urf-input.c
 ===================================================================
---- urfkill-0.6.0~20150318.103828.5539c0d.orig/src/urf-input.c
-+++ urfkill-0.6.0~20150318.103828.5539c0d/src/urf-input.c
+--- urfkill.orig/src/urf-input.c
++++ urfkill/src/urf-input.c
 @@ -83,6 +83,13 @@ input_event_cb (GIOChannel   *source,
  		GIOCondition  condition,
  		UrfInput     *input)

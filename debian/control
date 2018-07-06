@@ -22,9 +22,9 @@ Build-Depends: autopoint,
                libglib2.0-dev (>= 2.36),
                libpolkit-gobject-1-dev,
                libudev-dev,
-               libhybris-dev (>= 0.1.0) [amd64 arm64 armhf i386],
-               libandroid-properties-dev (>= 0.1.0) [amd64 arm64 armhf i386],
-               android-headers (>= 4.4.2) [amd64 arm64 armhf i386],
+               libhybris-dev (>= 0.1.0) [!arm64 !powerpc !ppc64el],
+               libandroid-properties-dev (>= 0.1.0) [!arm64 !powerpc !ppc64el],
+               android-headers (>= 4.4.2) [!arm64 !powerpc !ppc64el],
 Standards-Version: 3.9.5
 Homepage: http://www.freedesktop.org/wiki/Software/urfkill
 

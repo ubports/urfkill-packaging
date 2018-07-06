@@ -1,35 +1,16 @@
-urfkill (0.6.0-1ubports) xenial; urgency=medium
+urfkill (0.6.0~20150318.103828.5539c0d.1-0ubuntu3~overlay1) xenial; urgency=medium
 
-  [ You-Sheng Yang ]
-  * debian/patches/build-fix-a-compile-warning.patch:
-    - Add patch to fix a compile error with current toolchain
-  * debian/rules:
-    - Properly set DEB_HOST_MULTIARCH
-  * debian/control:
-    - Built-dep on hybris for arm64
+  * debian/patches/rework-rfkill-state-synchronization.patch:
+    - Add patch to synchrinize rfkill state correctly on startup
 
- -- Łukasz 'sil2100' Zemczak <lukasz.zemczak@ubuntu.com>  Fri, 26 Aug 2016 12:56:01 +0200
+ -- Simon Fels <simon.fels@canonical.com>  Fri, 06 May 2016 12:13:11 +0200
 
-urfkill (0.6.0~20150318.103828.5539c0d.1-0ubuntu4) xenial; urgency=medium
-
-  * Protect against race condition on start in Touch devices (LP: #1549320)
-
- -- Alfonso Sanchez-Beato (email Canonical) <alfonso.sanchez-beato@canonical.com>  Wed, 24 Feb 2016 18:14:55 +0100
-
-urfkill (0.6.0~20150318.103828.5539c0d.1-0ubuntu3) xenial; urgency=medium
-
-  * Specify build-dependency architecture limitations on libhybris-dev,
-    libandroid-properties-dev, and android-headers in positive rather than
-    negative terms, so that we don't incorrectly try to use those packages
-    on new architectures that lack Android support.
-
- -- Colin Watson <cjwatson@ubuntu.com>  Tue, 29 Dec 2015 00:43:30 +0000
-
-urfkill (0.6.0~20150318.103828.5539c0d.1-0ubuntu2) wily; urgency=medium
+urfkill (0.6.0~20150318.103828.5539c0d.1-0ubuntu2) vivid; urgency=medium
 
   * Add monitor-urfkill debugging script
+  * Protect against race condition on start in Touch devices (LP: #1549320)
 
- -- Alfonso Sanchez-Beato (email Canonical) <alfonso.sanchez-beato@canonical.com>  Mon, 27 Apr 2015 17:17:27 -0500
+ -- Alfonso Sanchez-Beato (email Canonical) <alfonso.sanchez-beato@canonical.com>  Wed, 24 Feb 2016 18:07:19 +0100
 
 urfkill (0.6.0~20150318.103828.5539c0d.1-0ubuntu1) vivid; urgency=medium
 

@@ -4,8 +4,6 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
-
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
 debian/urfkill.upstart: debian/urfkill.upstart.in

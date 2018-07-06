@@ -7,16 +7,16 @@ Last-Update: 2012-07-17
  po/POTFILES.skip |    1 +
  2 files changed, 3 insertions(+)
 
-Index: urfkill-0.6.0~20150318.103828.5539c0d/po/POTFILES.skip
+Index: b/po/POTFILES.skip
 ===================================================================
 --- /dev/null
-+++ urfkill-0.6.0~20150318.103828.5539c0d/po/POTFILES.skip
++++ b/po/POTFILES.skip
 @@ -0,0 +1 @@
 +policy/org.freedesktop.urfkill.policy.in
-Index: urfkill-0.6.0~20150318.103828.5539c0d/po/POTFILES.in
+Index: b/po/POTFILES.in
 ===================================================================
 --- /dev/null
-+++ urfkill-0.6.0~20150318.103828.5539c0d/po/POTFILES.in
++++ b/po/POTFILES.in
 @@ -0,0 +1,2 @@
 +src/urf-main.c
 +src/urf-device-ofono.c
