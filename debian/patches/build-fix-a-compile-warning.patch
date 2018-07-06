@@ -5,16 +5,11 @@ Subject: [PATCH 3/3] build: fix a compile warning
 
 urf_daemon_block() tries to return a value from as a void function.
 
-diff --git a/src/urf-daemon.c b/src/urf-daemon.c
-index 7cb23b0..ea5539e 100644
---- a/src/urf-daemon.c
-+++ b/src/urf-daemon.c
-@@ -289,17 +289,17 @@ urf_daemon_block (UrfDaemon             *daemon,
- 	UrfDaemonPrivate *priv = daemon->priv;
- 	PolkitSubject *subject = NULL;
- 	KillswitchState state;
- 	GTask *task;
- 	gint error = 0;
+Index: urfkill-0.6.0~20150318.103828.5539c0d/src/urf-daemon.c
+===================================================================
+--- urfkill-0.6.0~20150318.103828.5539c0d.orig/src/urf-daemon.c
++++ urfkill-0.6.0~20150318.103828.5539c0d/src/urf-daemon.c
+@@ -294,7 +294,7 @@ urf_daemon_block (UrfDaemon
  	char *error_str;
  	gboolean done = FALSE;
  
@@ -23,11 +18,3 @@ index 7cb23b0..ea5539e 100644
  
  	if (!urf_arbitrator_has_devices (priv->arbitrator))
  		goto out;
- 
- 	subject = urf_polkit_get_subject (priv->polkit, invocation);
- 	if (subject == NULL)
- 		goto out;
- 
--- 
-2.9.3
-
