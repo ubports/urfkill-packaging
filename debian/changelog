@@ -1,4 +1,4 @@
-urfkill (0.6.0~20150318.103828.5539c0d.1-0ubuntu4.1~xenial1) xenial; urgency=medium
+urfkill (0.6.0-1ubports) xenial; urgency=medium
 
   [ You-Sheng Yang ]
   * debian/patches/build-fix-a-compile-warning.patch:
