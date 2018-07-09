@@ -1,3 +1,9 @@
+urfkill (0.6.0~20150318.103828.5539c0d.1-0ubports0) xenial; urgency=medium
+
+  * Import to UBports
+
+ -- Dalton Durst <dalton@ubports.com>  Mon, 09 Jul 2018 12:56:00 -0500
+
 urfkill (0.6.0~20150318.103828.5539c0d.1-0ubuntu3~overlay1) xenial; urgency=medium
 
   * debian/patches/rework-rfkill-state-synchronization.patch:
