@@ -7,8 +7,8 @@ debug this if there really is an issue.
 
 Index: b/src/urf-input.c
 ===================================================================
---- a/src/urf-input.c
-+++ b/src/urf-input.c
+--- b/src/urf-input.c
++++ a/src/urf-input.c
 @@ -83,6 +83,13 @@ input_event_cb (GIOChannel   *source,
  		GIOCondition  condition,
  		UrfInput     *input)
