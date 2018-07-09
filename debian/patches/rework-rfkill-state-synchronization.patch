@@ -12,10 +12,10 @@ rfkill correctly with the internally stored one.
  src/urf-arbitrator.c | 155 +++++++++++++++++++++------------------------------
  1 file changed, 63 insertions(+), 92 deletions(-)
 
-Index: urfkill-packaging/src/urf-arbitrator.c
+Index: b/src/urf-arbitrator.c
 ===================================================================
---- urfkill-packaging.orig/src/urf-arbitrator.c
-+++ urfkill-packaging/src/urf-arbitrator.c
+--- a/src/urf-arbitrator.c
++++ b/src/urf-arbitrator.c
 @@ -693,6 +693,58 @@ static inline gboolean is_hybris_type(Ur
  }
  #endif /* HAS_HYBRIS */
