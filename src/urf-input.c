@@ -83,6 +83,13 @@ input_event_cb (GIOChannel   *source,
 		GIOCondition  condition,
 		UrfInput     *input)
 {
+	g_debug ("input event condition %x (%s%s%s%s )",
+		 condition,
+		 condition & G_IO_IN ? " G_IO_IN" : "",
+		 condition & G_IO_ERR ? " G_IO_ERR" : "",
+		 condition & G_IO_HUP ? " G_IO_HUP" : "",
+		 condition & ~(G_IO_IN | G_IO_ERR | G_IO_HUP) ? " with extra state" : "");
+
 	if (condition & G_IO_IN) {
 		GIOStatus status;
 		struct input_event event;

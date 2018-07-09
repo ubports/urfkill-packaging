@@ -693,6 +693,58 @@ static inline gboolean is_hybris_type(UrfArbitrator *arbitrator, int type)
 }
 #endif /* HAS_HYBRIS */
 
+static GIOStatus
+process_event(UrfArbitrator *arbitrator)
+{
+	UrfArbitratorPrivate *priv = arbitrator->priv;
+	GIOStatus status;
+	struct rfkill_event event;
+	gsize read;
+	gboolean soft, hard;
+
+	memset(&event, 0, sizeof(event));
+
+	status = g_io_channel_read_chars (priv->channel,
+					  (char *) &event,
+					  sizeof(event),
+					  &read,
+					  NULL);
+
+	if (status != G_IO_STATUS_NORMAL)
+		return status;
+
+	if (read != sizeof(event))
+		return status;
+
+	print_event (&event);
+
+#ifdef HAS_HYBRIS
+	if (is_hybris_type (arbitrator, event.type)) {
+		g_debug("Ignoring rfkill event as rfkill is managed by hybris");
+		return status;
+	}
+#endif
+
+	soft = (event.soft > 0);
+	hard = (event.hard > 0);
+
+	switch (event.op) {
+	case RFKILL_OP_CHANGE:
+		update_killswitch (arbitrator, event.idx, soft, hard);
+		break;
+	case RFKILL_OP_DEL:
+		remove_killswitch (arbitrator, event.idx);
+		break;
+	case RFKILL_OP_ADD:
+		add_killswitch (arbitrator, event.idx, event.type, soft, hard);
+		break;
+	default:
+		break;
+	}
+
+	return status;
+}
+
 /**
  * event_cb:
  **/
@@ -701,48 +753,13 @@ event_cb (GIOChannel    *source,
 	  GIOCondition   condition,
 	  UrfArbitrator *arbitrator)
 {
-	if (condition & G_IO_IN) {
-		GIOStatus status;
-		struct rfkill_event event;
-		gsize read;
-		gboolean soft, hard;
-
-		status = g_io_channel_read_chars (source,
-						  (char *) &event,
-						  sizeof(event),
-						  &read,
-						  NULL);
-
-		while (status == G_IO_STATUS_NORMAL && read == sizeof(event)) {
-			print_event (&event);
-
-#ifdef HAS_HYBRIS
-			if (!is_hybris_type(arbitrator, event.type)) {
-#else
-			{
-#endif /* HAS_HYBRIS */
-				soft = (event.soft > 0)?TRUE:FALSE;
-				hard = (event.hard > 0)?TRUE:FALSE;
-
-				if (event.op == RFKILL_OP_CHANGE) {
-					update_killswitch (arbitrator, event.idx, soft, hard);
-				} else if (event.op == RFKILL_OP_DEL) {
-					remove_killswitch (arbitrator, event.idx);
-				} else if (event.op == RFKILL_OP_ADD) {
-					add_killswitch (arbitrator, event.idx, event.type, soft, hard);
-				}
-			}
-
-			status = g_io_channel_read_chars (source,
-							  (char *) &event,
-							  sizeof(event),
-							  &read,
-							  NULL);
-		}
-	} else {
-		g_debug ("something else happened");
+	if (condition & (G_IO_NVAL | G_IO_HUP | G_IO_ERR))
 		return FALSE;
-	}
+
+	/* Process next event. GLib will call us repeatedly for anymore
+	 * available events. */
+	if (process_event (arbitrator) == G_IO_STATUS_ERROR)
+		return FALSE;
 
 	return TRUE;
 }
@@ -768,9 +785,7 @@ urf_arbitrator_startup (UrfArbitrator *arbitrator,
 			UrfConfig     *config)
 {
 	UrfArbitratorPrivate *priv = arbitrator->priv;
-	struct rfkill_event event;
 	int fd;
-	int i;
 
 	priv->config = g_object_ref (config);
 	priv->force_sync = urf_config_get_force_sync (config);
@@ -801,49 +816,14 @@ urf_arbitrator_startup (UrfArbitrator *arbitrator,
 
 		priv->fd = fd;
 
-		while (1) {
-			ssize_t len;
-
-			len = read(fd, &event, sizeof(event));
-			if (len < 0) {
-				if (errno == EAGAIN)
-					g_debug ("Reading of RFKILL events - EAGAIN");
-
-				g_warning ("Reading of RFKILL events failed");
-				break;
-			}
-
-			if (len != RFKILL_EVENT_SIZE_V1) {
-				g_warning ("Wrong size of RFKILL event\n");
-				continue;
-			}
-
-			if (event.op != RFKILL_OP_ADD)
-				continue;
-
-			if (event.type >= NUM_RFKILL_TYPES) {
-				g_warning ("event.type >= RFKILL_TYPES");
-				continue;
-			}
-
-#ifdef HAS_HYBRIS
-			/*
-			 * Although a proper RFKILL event may be generated
-			 * for a device,  skip if we've been instructed to
-			 * use hybris to comtrol the device as this indicates
-			 a broken driver.
-			 */
-
-			if (is_hybris_type(arbitrator, event.type))
-				continue;
-#endif /* HAS_HYBRIS */
-
-			add_killswitch (arbitrator, event.idx, event.type, event.soft, event.hard);
-		}
-
-		/* Setup monitoring */
 		priv->channel = g_io_channel_unix_new (priv->fd);
 		g_io_channel_set_encoding (priv->channel, NULL, NULL);
+		g_io_channel_set_buffered (priv->channel, FALSE);
+
+		/* Process all available events first to sync our state
+		 * now rather than doing it somewhere in the future */
+		while (process_event(arbitrator) == G_IO_STATUS_NORMAL);
+
 		priv->watch_id = g_io_add_watch (priv->channel,
 		                                 G_IO_IN | G_IO_HUP | G_IO_ERR,
 		                                 (GIOFunc) event_cb,
@@ -855,15 +835,6 @@ urf_arbitrator_startup (UrfArbitrator *arbitrator,
 	if (priv->hybris_wlan)
 		g_timeout_add (HYBRIS_WLAN_START_TIMEOUT_MS, create_hybris_device, arbitrator);
 #endif /* HAS_HYBRIS */
-
-	/* Set initial flight mode state from persistence */
-	if (priv->persist) {
-		/* Set all the devices that had saved state to what was saved */
-		for (i = RFKILL_TYPE_ALL + 1; i < NUM_RFKILL_TYPES; i++)
-
-			/* no callback for startup sequence */
-			urf_arbitrator_set_block (arbitrator, i, urf_config_get_persist_state (config, i), NULL);
-	}
 
 	return TRUE;
 }
