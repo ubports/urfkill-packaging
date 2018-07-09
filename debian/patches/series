@@ -1,3 +1,4 @@
 01_fix_ftbfs_on_intltool.patch
+urfkill-debug-input.patch
 use-glib-gettext.patch
 rework-rfkill-state-synchronization.patch
