@@ -1,0 +1,175 @@
+Version 0.5.0
+~~~~~~~~~~~~~
+Released: 2014-01-23
+
+New Features:
+- config: implement persistence via an ini file in /var/lib/urfkill (Mathieu Trudel-Lapierre)
+- Implement flight mode (applying patches from Tony Espy) (Mathieu Trudel-Lapierre)
+- Add stubs for no session checking (breaks inhibit). (Mathieu Trudel-Lapierre)
+- Simplistic port of UrfSessionChecker and UrfSeat to logind (Mathieu Trudel-Lapierre)
+- Add new rfkill type: NFC (Tony Espy)
+
+Bugfixes:
+- Use g_message() rather than g_info() for standard messages. (Mathieu Trudel-Lapierre)
+- Update log levels to only display relevant killswitch addition/removal and important warnings (Mathieu Trudel-Lapierre)
+- Enable logging to syslog, optionally with debug (Mathieu Trudel-Lapierre)
+- arbitrator: set newly found devices to the saved persistent state (Mathieu Trudel-Lapierre)
+- config: can't assume key_control to be enabled if there is no DMI information (Mathieu Trudel-Lapierre)
+- Update default config file for persistence. (Mathieu Trudel-Lapierre)
+- UrfArbitrator: apply review from lcp for flight mode (Mathieu Trudel-Lapierre)
+- UrfConfig: apply review from lcp for persistence (Mathieu Trudel-Lapierre)
+- main: handle SIGTERM (Mathieu Trudel-Lapierre)
+- arbitrator: save/restore per-type killswitch state on startup, dispose. (Mathieu Trudel-Lapierre)
+- daemon: clean up UrfConfig later (Mathieu Trudel-Lapierre)
+- Add persist option to UrfConfig. (Mathieu Trudel-Lapierre)
+- Fix build for no session tracking. (Mathieu Trudel-Lapierre)
+- Propagate/notify device state changes to UrfKillswitch objects (Mathieu Trudel-Lapierre)
+- Fix errors/typos in LoginD port. (Mathieu Trudel-Lapierre)
+- Allow selecting the session tracking method at build time (Mathieu Trudel-Lapierre)
+- Fix include for UrfSeat (Mathieu Trudel-Lapierre)
+- Rename UrfConsolekit to UrfSessionChecker (Mathieu Trudel-Lapierre)
+- Rename urf-seat and urf-consolekit for generalization (Mathieu Trudel-Lapierre)
+- Check glib version for g_type_init() (Gary Lin)
+- Add NFC to glib and docs (Gary Lin)
+- Don't crash for missing DMI (Tony Espy)
+- Add gcc warnings to urfkilld and adjust warning types (Gary Lin)
+
+Version 0.4.0
+~~~~~~~~~~~~~
+Released: 2012-05-24
+
+New Features:
+- Migrate from dbus-glib to gdbus (Gary Lin)
+
+Bugfixes:
+- urf-input: Remove the unnecessary device match rules (Gary Lin)
+- urf-input: Match the property "ID_INPUT_KEY" (Gary Lin)
+- urf-input: Filter out the devices without the EV_KEY capability (David Härdeman)
+- urf-main: quit if the dbus name is already owned (Gary Lin)
+- urfkill-glib: Rename the enumerations (Gary Lin)
+- urf-polkit: Remove unused code (Gary Lin)
+- glib/urf-device: Refresh only 'soft' and 'hard' (Gary Lin)
+- urf-daemon: Remove the unused loop for the object registration (Gary Lin)
+- urf-daemon: Pass the right parameters back (Gary Lin)
+- urf-seat: Check error not proxy (Gary Lin)
+- urf-consolekit: correct object path array handling (Gary Lin)
+- urf-consolekit: correct error check (Gary Lin)
+- urf-device: correct the introspection xml (Gary Lin)
+- urf-consolekit: invoke DBus methods correctly (Gary Lin)
+- urf-device, killswitch: release the introspection data (Gary Lin)
+- urf-killswitch: unref connection properly (Gary Lin)
+- urf-config: Plug a memory leak (Gary Lin)
+
+Version 0.3.0
+~~~~~~~~~~~~~
+Released: 2011-09-15
+
+New Features:
+- added fork option for urfkill (Reza Jelveh)
+- urf-device: New property: platform (Gary Lin)
+- urf-killswitch: export UrfKillswitch to D-Bus (Gary Lin)
+- glib/urf-client: Add a new function urf_client_enumerate_devices_sync() (Gary Lin)
+- glib/urf-device: Make the "soft" property writable (Gary Lin)
+- glib/urf-killswitch: New objects for killswitches (Gary Lin)
+- Generate .xz tarballs (Gary Lin)
+
+Bugfixes:
+- Use the new threadsafe signal handling support in GLib (Gary Lin)
+- Clean up configure.ac (Gary Lin)
+- Use the upstream GETTEXT (Gary Lin)
+- autogen.sh: Use autoreconf instead of custom script (Gary Lin)
+- Rename UrfKillswitch as UrfArbitrator (Gary Lin)
+- urf-main: Correct the return type (Gary Lin)
+- urf-main: use g_unix_signal_add_full() (Gary Lin)
+- urf-input: Filter out input devices by subsystem and driver (Gary Lin)
+- urf-input: Only open a valid input node (Gary Lin)
+- urf-device: Get the name and subsystem by libudev (Gary Lin)
+- urf-device: Query killswitch information from udev (Gary Lin)
+- urf-device: Match platform parent node (Gary Lin)
+- urf-device: Don't rely on absolute path (Gary Lin)
+- urf-device: Calculate the state of the device (Gary Lin)
+- urf-device: Unref the object after dbus registration failure (Gary Lin)
+- urf-device: Return FALSE for connection failure (Gary Lin)
+- urf-daemon: Do not always invoke dbus_g_method_return for Block() (Gary Lin)
+- glib/urf-device: Unref private objects properly (Gary Lin)
+
+Version 0.2.0
+~~~~~~~~~~~~~
+Released: 2011-06-17
+
+New Features:
+- All DBus methods, signals, and properties were revised and amended (Gary Lin)
+- Support the individual key control settings for each user (Gary Lin)
+- GObject introspection support in liburfkill-glib (Gary Lin)
+- Documents for the daemon, the DBus interfaces, and liburfkill-glib (Gary Lin)
+- Test cases for the daemon and liburkill-glib (Gary Lin)
+
+Bugfixes:
+
+- urf-killswitch: A cosmetic modification (Gary Lin)
+- urf-killswitch: missing converting function (Gary Lin)
+- urf-killswitch: Free the object properly (Gary Lin)
+- glib/urf-client: update coments and details of signals (Gary Lin)
+- glib/urf-client: Get Daemon Version (Gary Lin)
+- urf-daemon: Remove redundant state check (Gary Lin)
+- glib/urf-client: plug a leakage (Gary Lin)
+- urf-consolekit: Free UrfInhibitor correctly (Gary Lin)
+- urf-daemon: Clean up unused code (Gary Lin)
+- urf-[consolekit,seat]: Drop SessionRemoved (Gary Lin)
+- urf-consolekit: Safe guards for some functions (Gary Lin)
+- Replace g_list_free_full() with g_list_free() (Gary Lin)
+
+Version 0.1.1
+~~~~~~~~~~~~~
+Released: 2011-04-15
+
+New Features:
+- New hardware profile parser to configure urfkill by the rules (Gary Lin)
+- Hardware profiles for ASUS eeepc 1005HA and Lenovo X200 (Gary Lin)
+- Handle KEY_RFKILL (Gary Lin)
+- Tentative dbus methods for the key control of urfkill (Gary Lin)
+- Support input devices generated by acer-wmi and msi-laptop (Gary Lin)
+- Change the default config dir (Gary Lin)
+
+Bugfixes:
+- Depend on stable udev API (Gary Lin)
+- Use the system rfkill header file (Gary Lin)
+- Pointer dereference for private variables (Gary Lin)
+- urf-config: chain up finalize with the parent class (Gary Lin)
+- urf-config: Remove an unused variable (Gary Lin)
+- urf-config: Stop crying for missing options (Gary Lin)
+- urf-config: Singletonize urf-config (Gary Lin)
+- urf-config: Clear GError if necessary (Gary Lin)
+- urf-daemon: Send back status for dbus methods (Gary Lin)
+- urf-killswitch: Correct copyright headers (Gary Lin)
+- urf-input: Free the keys in the hashtable (Gary Lin)
+- urf-input: Remove the private input device table (Gary Lin)
+- urf-main: Use the right variable for the config file (Gary Lin)
+- urf-utils: Free GError before return (Gary Lin)
+
+Version 0.1.0
+~~~~~~~~~~~~~
+Release date: 2011-02-25
+
+New Features:
+- Catch rfkill keys and update the states of killswitches (Gary Lin)
+- Add the conf file for system wide configuration (Gary Lin)
+- Drop root privilege if necessary (Gary Lin)
+
+Bugfixes:
+- Port from EggDebug to the GLib built-in logging framework (Gary Lin)
+- Modify urf_killswitch_init() for better error handling (Gary Lin)
+- urf-killswitch: Set the encoding of IO channel to raw (Gary Lin)
+- urf-killswitch: Assume NO ADAPTER before getting state (Gary Lin)
+- urf-killswitch: Sync hard block and soft block (Gary Lin)
+- urf-killswitch: Add pivot killswitches for every type (Gary Lin)
+- urf-killswitch: Emit remove signal until everything is done (Gary Lin)
+- urf-killswitch: Handle the file descriptor correctly (Gary Lin)
+- urf-killswitch: Sync the state with that of the pivot killswitch (Gary Lin)
+- urf-killswitch: Don't change anything if key_control is FALSE (Gary Lin)
+
+urfkill 0.0.1
+~~~~~~~~~~~~~
+Release date: 2010-10-12
+
+- Initial proof of concept version

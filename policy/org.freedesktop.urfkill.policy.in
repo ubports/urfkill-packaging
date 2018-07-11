@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!DOCTYPE policyconfig PUBLIC
+ "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+ "http://www.freedesktop.org/standards/PolicyKit/1.0/policyconfig.dtd">
+
+<!--
+Policy definitions for urfkill
+
+Copyright (c) 2010 Gary Ching-Pang Lin <glin@suse.com>
+
+NOTE: If you make changes to this file, make sure to validate the file
+using the polkit-policy-file-validate(1) tool. Changes made to this
+file are instantly applied.
+-->
+
+<policyconfig>
+  <vendor>The urfkill Project</vendor>
+
+  <action id="org.freedesktop.urfkill.block">
+    <_description>Block a specific killswitch type</_description>
+    <_message>Authentication is required to set block on the killswitches by type</_message>
+    <defaults>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+  </action>
+
+  <action id="org.freedesktop.urfkill.blockidx">
+    <_description>Block a specific killswitch</_description>
+    <_message>Authentication is required to set block on the killswitch</_message>
+    <defaults>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+  </action>
+
+  <action id="org.freedesktop.urfkill.flight_mode">
+    <_description>Enable flight mode</_description>
+    <_message>Authentication is required to enable/disable flight mode</_message>
+    <defaults>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>yes</allow_active>
+    </defaults>
+  </action>
+
+
+</policyconfig>
